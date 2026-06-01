@@ -599,6 +599,16 @@ if (process.env.NODE_ENV === 'production') {
     res.sendFile(path.join(distPath, 'index.html'))
   })
 }
+if (process.env.NODE_ENV === 'production') {
+  const distPath = path.resolve(process.cwd(), 'dist')
+
+  app.use(express.static(distPath))
+
+  app.get(/.*/, (_req, res) => {
+    res.sendFile(path.join(distPath, 'index.html'))
+  })
+}
+
 app.listen(PORT, () => {
-  console.log(`Servidor backend corriendo en http://localhost:${PORT}`)
+  console.log(`Servidor backend corriendo en el puerto ${PORT}`)
 })
