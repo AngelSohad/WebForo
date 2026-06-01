@@ -30,6 +30,22 @@ async function ensureColumn(sql) {
 }
 
 async function prepararTablaUsuarios() {
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS usuarios (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      nombre VARCHAR(100) NOT NULL,
+      email VARCHAR(150) NOT NULL UNIQUE,
+      password VARCHAR(255) NULL,
+      rol VARCHAR(20) DEFAULT 'usuario',
+      estado VARCHAR(20) DEFAULT 'activo',
+      plan VARCHAR(20) DEFAULT 'basico',
+      fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      firebase_uid VARCHAR(255) NULL,
+      foto TEXT NULL,
+      proveedor VARCHAR(50) NULL
+    )
+  `)
+
   await ensureColumn("ALTER TABLE usuarios ADD COLUMN rol VARCHAR(20) DEFAULT 'usuario'")
   await ensureColumn("ALTER TABLE usuarios ADD COLUMN estado VARCHAR(20) DEFAULT 'activo'")
   await ensureColumn("ALTER TABLE usuarios ADD COLUMN plan VARCHAR(20) DEFAULT 'basico'")
@@ -38,6 +54,8 @@ async function prepararTablaUsuarios() {
   await ensureColumn("ALTER TABLE usuarios ADD COLUMN foto TEXT NULL")
   await ensureColumn("ALTER TABLE usuarios ADD COLUMN proveedor VARCHAR(50) NULL")
   await ensureColumn('ALTER TABLE usuarios MODIFY password VARCHAR(255) NULL')
+
+  console.log('✓ Tabla usuarios preparada correctamente')
 }
 
 await prepararTablaUsuarios()
